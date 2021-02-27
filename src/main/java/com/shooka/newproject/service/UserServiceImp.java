@@ -9,6 +9,7 @@ import lombok.Getter;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -43,6 +44,7 @@ public class UserServiceImp implements UserService {
         user.setPassword(userDto.getPassword());
         user.setEmail(userDto.getEmail());
         user.setRole(Role.user);
+       // user.setLessons();
         userRepository.save(user);
         return user;
     }

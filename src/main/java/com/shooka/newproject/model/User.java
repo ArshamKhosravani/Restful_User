@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Data
@@ -30,5 +31,9 @@ public class User implements Serializable {
 
     @Column(name = "user_role", nullable = false)
     private Role role;
+
+    @ManyToMany
+    @Column
+    private Set<Lesson> lessons;
 
 }

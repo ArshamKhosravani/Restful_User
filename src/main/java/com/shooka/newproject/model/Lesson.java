@@ -3,6 +3,8 @@ package com.shooka.newproject.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "Lesson_table")
@@ -16,5 +18,12 @@ public class Lesson {
 
     @Column(name = "Lesson_name", nullable = false)
     private String lessonName;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_lesson",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "lesson_id"))
+    private Set<User> users;
 
 }

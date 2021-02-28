@@ -32,8 +32,7 @@ public class User implements Serializable {
     @Column(name = "user_role", nullable = false)
     private Role role;
 
-    @ManyToMany
-    @Column
+    @ManyToMany(mappedBy = "users")
     private Set<Lesson> lessons;
 
 }

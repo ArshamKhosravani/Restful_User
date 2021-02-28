@@ -1,8 +1,7 @@
 package com.shooka.newproject.service;
 
-import com.shooka.newproject.model.Role;
-import com.shooka.newproject.model.User;
-import com.shooka.newproject.model.UserDto;
+import com.shooka.newproject.model.*;
+import com.shooka.newproject.repository.LessonRepository;
 import com.shooka.newproject.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,13 +10,15 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
-@Getter
 public class UserServiceImp implements UserService {
 
     private UserRepository userRepository;
+    private LessonRepository lessonRepository;
 
     @PostConstruct
     public User initialAdmin() {
@@ -26,6 +27,7 @@ public class UserServiceImp implements UserService {
         user.setUsername("admin");
         user.setPassword("12345");
         user.setEmail("admin@gmail.com");
+        user.setLessons(Collections.emptySet());
         userRepository.save(user);
         return user;
     }
@@ -34,7 +36,7 @@ public class UserServiceImp implements UserService {
         return userRepository.findAll();
     }
 
-    public User getUser(Long id){
+    public User getUser(Long id) {
         return userRepository.findById(id).get();
     }
 
@@ -44,7 +46,16 @@ public class UserServiceImp implements UserService {
         user.setPassword(userDto.getPassword());
         user.setEmail(userDto.getEmail());
         user.setRole(Role.user);
-       // user.setLessons();
+        Set<Lesson> lessonSet = Collections.emptySet();
+
+        for (LessonDto lesson : userDto.getLessons()) {
+            Optional<Lesson> optionalLesson = lessonRepository.findByLessonName("Math");
+            optionalLesson.ifPresent(ls -> {
+                lessonSet.add(ls);
+            });
+        }
+
+        user.setLessons(lessonSet);
         userRepository.save(user);
         return user;
     }

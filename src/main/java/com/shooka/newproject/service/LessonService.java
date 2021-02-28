@@ -2,27 +2,18 @@ package com.shooka.newproject.service;
 
 import com.shooka.newproject.model.Lesson;
 import com.shooka.newproject.model.LessonDto;
-import com.shooka.newproject.repository.LessonRepository;
-import com.shooka.newproject.repository.UserRepository;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.util.Set;
+import java.util.List;
 
-@Service
-@AllArgsConstructor
-public class LessonService {
+public interface LessonService {
 
-    private LessonRepository lessonRepository;
-    private UserRepository userRepository;
+    Lesson getLesson(Long id);
 
-    public void assignLessonsToUser(Long id, Set<LessonDto> lessons) {
-        Lesson lesson = new Lesson();
-        for (LessonDto lessonDto : lessons) {
-            lesson.setLessonName(lessonDto.getLessonName());
-        }
+    List<Lesson> getAllLessons();
 
-        userRepository.findById(id).get().setLessons((Set<Lesson>) lesson);
-        userRepository.save(userRepository.findById(id).get());
-    }
+    Lesson addLesson(LessonDto lessonDto);
+
+    void deleteLesson(Long id);
+
+    Lesson updateLesson(Long id, LessonDto lessonDto);
 }

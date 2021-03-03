@@ -11,9 +11,9 @@ public interface LessonService {
 
     List<Lesson> getAllLessons();
 
-    Lesson addLesson(LessonDto lessonDto);
+    Lesson addLesson(Lesson lesson);
 
     void deleteLesson(Long id);
 
-    Lesson updateLesson(Long id, LessonDto lessonDto);
+    Lesson updateLesson(Long id, Lesson lesson);
 }

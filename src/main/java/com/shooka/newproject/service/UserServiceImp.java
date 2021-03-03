@@ -1,16 +1,17 @@
 package com.shooka.newproject.service;
 
-import com.shooka.newproject.model.*;
+import com.shooka.newproject.model.Lesson;
+import com.shooka.newproject.model.Role;
+import com.shooka.newproject.model.User;
 import com.shooka.newproject.repository.LessonRepository;
 import com.shooka.newproject.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -40,38 +41,35 @@ public class UserServiceImp implements UserService {
         return userRepository.findById(id).get();
     }
 
-    public User addUser(UserDto userDto) {
-        User user = new User();
-        user.setUsername(userDto.getUsername());
-        user.setPassword(userDto.getPassword());
-        user.setEmail(userDto.getEmail());
-        user.setRole(Role.user);
-        Set<Lesson> lessonSet = Collections.emptySet();
+    public User addUser(User user) {
+        User newUser = new User();
+        newUser.setUsername(user.getUsername());
+        newUser.setPassword(user.getPassword());
+        newUser.setEmail(user.getEmail());
+        newUser.setRole(Role.user);
+        Set<Lesson> lessonSet = new HashSet<>();
 
-        for (LessonDto lesson : userDto.getLessons()) {
-            Optional<Lesson> optionalLesson = lessonRepository.findByLessonName("Math");
-            optionalLesson.ifPresent(ls -> {
-                lessonSet.add(ls);
-            });
+        for (Lesson lesson : user.getLessons()) {
+            lessonSet.add(lessonRepository.findByLessonName(lesson.getLessonName()));
         }
 
         user.setLessons(lessonSet);
-        userRepository.save(user);
-        return user;
+        userRepository.save(newUser);
+        return newUser;
     }
 
     public void removeUser(long id) {
         userRepository.deleteById(id);
     }
 
-    public User updatePerson(long id, UserDto userDto) {
-        User user = userRepository.findById(id).get();
-        user.setUsername(userDto.getUsername());
-        user.setPassword(userDto.getPassword());
-        user.setEmail(userDto.getEmail());
-        user.setRole(Role.user);
+    public User updatePerson(long id, User user) {
+        User newUser = userRepository.findById(id).get();
+        newUser.setUsername(user.getUsername());
+        newUser.setPassword(user.getPassword());
+        newUser.setEmail(user.getEmail());
+        newUser.setRole(Role.user);
         userRepository.save(user);
-        return user;
+        return newUser;
     }
 
     public void updateUserName(long id, String username) {

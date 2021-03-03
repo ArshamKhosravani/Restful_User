@@ -1,11 +1,14 @@
 package com.shooka.newproject.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -32,7 +35,13 @@ public class User implements Serializable {
     @Column(name = "user_role", nullable = false)
     private Role role;
 
-    @ManyToMany(mappedBy = "users")
-    private Set<Lesson> lessons;
+    @ManyToMany
+   // @JsonIgnoreProperties("users")
+    //@JsonIgnore
+    @JoinTable(
+            name = "user_lesson",
+            joinColumns = @JoinColumn(name = "user_Id"),
+            inverseJoinColumns = @JoinColumn(name = "Lesson_Id"))
+    private Set<Lesson> lessons = new HashSet<>();
 
 }

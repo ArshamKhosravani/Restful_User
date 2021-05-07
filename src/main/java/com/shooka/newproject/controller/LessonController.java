@@ -1,6 +1,7 @@
 package com.shooka.newproject.controller;
 
-import com.shooka.newproject.mapper.Map;
+
+
 import com.shooka.newproject.model.Lesson;
 import com.shooka.newproject.model.LessonDto;
 import com.shooka.newproject.repository.LessonRepository;
@@ -21,7 +22,6 @@ public class LessonController {
     private LessonServiceImp lessonServiceImp;
     private UserRepository userRepository;
     private LessonRepository lessonRepository;
-    private Map map;
 
     @GetMapping("/lesson/{id}/")
     public ResponseEntity<?> getLesson(@PathVariable Long id) {
@@ -37,7 +37,7 @@ public class LessonController {
 
     @PostMapping("/addLesson/")
     public ResponseEntity<?> addLesson(@RequestBody LessonDto lessonDto) {
-        lessonServiceImp.addLesson(map.convertToLesson(lessonDto));
+        lessonServiceImp.addLesson(lessonDto);
         return ResponseEntity.ok().body("Lesson added!");
     }
 
@@ -45,7 +45,7 @@ public class LessonController {
     public ResponseEntity<?> updateLesson(@PathVariable Long id, @RequestBody LessonDto lessonDto) {
         if (lessonRepository.findById(id).isEmpty())
             return ResponseEntity.badRequest().body("There is no lesson with that id!");
-        lessonServiceImp.updateLesson(id, map.convertToLesson(lessonDto));
+        lessonServiceImp.updateLesson(id, lessonDto);
         return ResponseEntity.ok().body("Lesson updated!");
     }
 

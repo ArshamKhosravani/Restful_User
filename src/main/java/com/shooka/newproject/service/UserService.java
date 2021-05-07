@@ -11,11 +11,11 @@ public interface UserService {
 
     User getUser(Long id);
 
-    User addUser(User user);
+    User addUser(UserDto user);
 
     void removeUser(long id);
 
-    User updatePerson(long id, User user);
+    User updatePerson(long id, UserDto user);
 
     void updateUserName(long id, String username);
 

@@ -1,6 +1,5 @@
 package com.shooka.newproject.controller;
 
-import com.shooka.newproject.mapper.Map;
 import com.shooka.newproject.model.User;
 import com.shooka.newproject.model.UserDto;
 import com.shooka.newproject.repository.UserRepository;
@@ -19,7 +18,6 @@ public class UserController {
 
     private UserServiceImp userService;
     private UserRepository userRepository;
-    private Map map;
 
     @GetMapping("/getAll/")
     public List<User> getAllUsers() {
@@ -39,8 +37,7 @@ public class UserController {
             return ResponseEntity.badRequest().body("the user with this username is already exists!");
         if (userRepository.findByEmail(userDto.getEmail()) != null)
             return ResponseEntity.badRequest().body("the user with this Email is already exists!");
-       // userService.addUser(map.convertToUser(userDto));
-        
+        userService.addUser(userDto);
         return ResponseEntity.ok().body("User Created");
     }
 
@@ -56,7 +53,7 @@ public class UserController {
     public ResponseEntity<?> updateUser(@PathVariable long id, @RequestBody UserDto userDto) {
         if (userRepository.findById(id).isEmpty())
             return ResponseEntity.badRequest().body("the user with this id is not exists");
-        userService.updatePerson(id, map.convertToUser(userDto));
+        userService.updatePerson(id, userDto);
         return ResponseEntity.ok("User upadted!");
     }
 

@@ -1,6 +1,7 @@
 package com.shooka.newproject.service;
 
 import com.shooka.newproject.model.Lesson;
+import com.shooka.newproject.model.LessonDto;
 import com.shooka.newproject.repository.LessonRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class LessonServiceImp implements LessonService {
         return lessonRepository.findAll();
     }
 
-    public Lesson addLesson(Lesson lesson) {
+    public Lesson addLesson(LessonDto lesson) {
         Lesson newLesson = new Lesson();
         newLesson.setLessonName(lesson.getLessonName());
         return lessonRepository.save(newLesson);
@@ -31,7 +32,7 @@ public class LessonServiceImp implements LessonService {
         lessonRepository.deleteById(id);
     }
 
-    public Lesson updateLesson(Long id, Lesson lesson) {
+    public Lesson updateLesson(Long id, LessonDto lesson) {
         Lesson newLesson = lessonRepository.findById(id).get();
         newLesson.setLessonName(lesson.getLessonName());
         return lessonRepository.save(newLesson);

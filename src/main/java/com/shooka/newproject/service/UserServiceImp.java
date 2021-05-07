@@ -1,18 +1,13 @@
 package com.shooka.newproject.service;
 
-import com.shooka.newproject.model.Lesson;
-import com.shooka.newproject.model.Role;
-import com.shooka.newproject.model.User;
+import com.shooka.newproject.model.*;
 import com.shooka.newproject.repository.LessonRepository;
 import com.shooka.newproject.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -28,7 +23,7 @@ public class UserServiceImp implements UserService {
         user.setUsername("admin");
         user.setPassword("12345");
         user.setEmail("admin@gmail.com");
-        user.setLessons(Collections.emptySet());
+        user.setLessons(Collections.emptyList());
         userRepository.save(user);
         return user;
     }
@@ -41,19 +36,18 @@ public class UserServiceImp implements UserService {
         return userRepository.findById(id).get();
     }
 
-    public User addUser(User user) {
+    public User addUser(UserDto user) {
         User newUser = new User();
         newUser.setUsername(user.getUsername());
         newUser.setPassword(user.getPassword());
         newUser.setEmail(user.getEmail());
         newUser.setRole(Role.user);
-        Set<Lesson> lessonSet = new HashSet<>();
-
-        for (Lesson lesson : user.getLessons()) {
+        List<Lesson> lessonSet = new ArrayList<>();
+        for (LessonDto lesson : user.getLessons()) {
             lessonSet.add(lessonRepository.findByLessonName(lesson.getLessonName()));
         }
 
-        user.setLessons(lessonSet);
+        newUser.setLessons(lessonSet);
         userRepository.save(newUser);
         return newUser;
     }
@@ -62,13 +56,17 @@ public class UserServiceImp implements UserService {
         userRepository.deleteById(id);
     }
 
-    public User updatePerson(long id, User user) {
+    public User updatePerson(long id, UserDto user) {
         User newUser = userRepository.findById(id).get();
         newUser.setUsername(user.getUsername());
         newUser.setPassword(user.getPassword());
         newUser.setEmail(user.getEmail());
         newUser.setRole(Role.user);
-        userRepository.save(user);
+        List<Lesson> lessonSet = new ArrayList<>();
+        for (LessonDto lesson : user.getLessons()) {
+            lessonSet.add(lessonRepository.findByLessonName(lesson.getLessonName()));
+        }
+        userRepository.save(newUser);
         return newUser;
     }
 
